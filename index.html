@@ -7,6 +7,7 @@
     <title>Basic | Web Components</title>
 
     <script src="./tooltip.js"></script>
+    <script src="./confirmation-link.js"></script>
 </head>
 <body>
     <p>
@@ -21,6 +22,10 @@
     <br>
 
     <mxcd-tooltip></mxcd-tooltip>
+
+    <br>
+    <!-- When Using Custom Web Component For Existing Elements We Use "is" attribute on the element not a custom one -->
+    <a is="mxcd-confirmation-link" href="http://github.com/moaalaa">Visit My GitHub</a>
     
 
 </body>
