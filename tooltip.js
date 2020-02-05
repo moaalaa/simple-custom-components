@@ -40,31 +40,71 @@ class Tooltip extends HTMLElement {
         // Host ------------------------------------------------------------------------------
         // To style Custom WebComponent you Should Use ":host" Pseudo Selector
         // Be Aware "Light DOM" Styling Overwrite "Shadow DOM" Styling
+        // Also ":host" can used as function to make a condition
+        // EX: :host.important not working it's wrong, Use :host(.important) instead
+        // Notice that order of ":host(.|#|selector-condition)" must be above the normal ":host" selector
 
+        // Host Context ------------------------------------------------------------------------
+        // To style Custom WebComponent in a custom context you Should Use ":host-context()" Pseudo Selector
+        // Be Aware "Light DOM" Styling Overwrite "Shadow DOM" Styling
+        // ":host-context(surrounding-condition)" can used as function to make a condition
+        // EX: p :host not working it's wrong, Use :host-context(p) instead
+        // EX: :host-context(p.test), :host-context(p .test) can work normally
+        // Notice that order of ":host-context(.|#|selector-condition)" for ":host" not important at all
 
         this.shadowRoot.innerHTML = `
             <style>
+
+                :host-context(p) {
+                    background-color: var(--host-inside-p-color, #a030e6);
+                    color: #fff;
+                    font-weight: bold;
+                    line-height: 1.5;
+                }
+
+                :host(.important) {
+                    background-color: var(--important-color, lightcoral);
+                    color: #fff;
+                }
+
+                :host(.info) {
+                    background-color: var(--info-color, #47c1c1);
+                    color: #fff;
+                }
+
                 :host {
-                    background-color: lightgrey;
+                    background-color: var(--default-color, lightgrey);
+                    position: relative;
+                    padding: 0.15rem 0.5rem;
+                    border-radius: 5px;
+                    display: inline-block;
                 }
 
                 div {
+                    font-weight: normal;
                     background-color: #3a3a3a;
                     color: white;
                     position: absolute;
                     z-index: 10;
-                    right: 0;
-                    padding: .3rem .6rem;
+                    top: 1.5rem;
+                    right: .5rem;
+                    padding: .15rem;
                     font-size: 12px;
                     text-align: center;
+                    border-radius: 3px;
+                    box-shadow: 1px 1px 6px rgba(0, 0, 0, 0.26);
                 }
 
                 ::slotted(.highlight) {
                     border-bottom: 1px dashed lightgreen;
                 }
+
+                .icon {
+                    border-bottom: 1px dashed lightgreen;
+                }
             </style>
             <slot>Default Value</slot> 
-            <span> (?)</span>
+            <span class="icon">(?)</span>
         `;
     }
 
@@ -89,7 +129,6 @@ class Tooltip extends HTMLElement {
         // this.appendChild(icon);
         // Add Elements to the "Shadow DOM" not to "Light DOM" (Normal DOM)
         this.shadowRoot.appendChild(icon);
-        this.style.position = 'relative';
     }
 
     // "_methodName" Just convention to say it's just a method just called in inside the class "private method"

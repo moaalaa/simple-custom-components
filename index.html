@@ -17,6 +17,21 @@
         /* mxcd-tooltip {
             background-color: lightgrey;
         } */
+
+        :root {
+            --important-color: lightcoral;
+            --info-color: #47c1c1;
+            --default-color: lightgrey;
+            --host-inside-p-color: #a030e6;
+        }
+        
+        * {
+            box-sizing: border-box;
+        }
+
+        html {
+            font-family: sans-serif;
+        }
     </style>
 
     <script src="./tooltip.js"></script>
@@ -34,12 +49,17 @@
 
     <br>
 
-    <mxcd-tooltip>Tooltip Component without not text Attribute</mxcd-tooltip>
+    <mxcd-tooltip class="important">Tooltip Component without not text Attribute</mxcd-tooltip>
 
     <br>
+    <br>
+    <mxcd-tooltip class="info"></mxcd-tooltip>
+ 
+    <br>
+    
 
     <mxcd-tooltip></mxcd-tooltip>
-
+    <br>
     <br>
     <!-- When Using Custom Web Component For Existing Elements We Use "is" attribute on the element not a custom one -->
     <a is="mxcd-confirmation-link" href="http://github.com/moaalaa">Visit My GitHub</a>
