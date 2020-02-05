@@ -29,8 +29,25 @@ class Tooltip extends HTMLElement {
         // define Template and not putting the template in html file and git it here
         // innerHTML is just a property prepare some strings and browsers read it but not manipulating the "DOM" it self
         // Adding Styles to the "Shadow DOM" Give us a huge benefits because now styles are scoped
+        
+        // Slots ------------------------------------------------------------------------------
+        // To style Slotted Contents From inside the WebComponent you Should Use "::slotted(*|selector)" Pseudo Selector
+        // Notice that Normally Slotted Contents are Projected, means it's not moving inside the slot so we can style it by light DOM Styles
+        // So To Avoid That and provide Default Styles We Should Use "::slotted(selector-of-slotted-content)" Pseudo Selector
+        // ::slotted() Only Accept the Top Most Element Fo Styling EX: ::slotted(span a) will not working but ::slotted(span) will work
+        // Be Aware "Light DOM" Styling Overwrite "Shadow DOM" Styling
+
+        // Host ------------------------------------------------------------------------------
+        // To style Custom WebComponent you Should Use ":host" Pseudo Selector
+        // Be Aware "Light DOM" Styling Overwrite "Shadow DOM" Styling
+
+
         this.shadowRoot.innerHTML = `
             <style>
+                :host {
+                    background-color: lightgrey;
+                }
+
                 div {
                     background-color: #3a3a3a;
                     color: white;
@@ -40,6 +57,10 @@ class Tooltip extends HTMLElement {
                     padding: .3rem .6rem;
                     font-size: 12px;
                     text-align: center;
+                }
+
+                ::slotted(.highlight) {
+                    border-bottom: 1px dashed lightgreen;
                 }
             </style>
             <slot>Default Value</slot> 

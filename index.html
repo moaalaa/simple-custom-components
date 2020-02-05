@@ -1,24 +1,41 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Basic | Web Components</title>
 
+    <style>
+        /* Normally Slotted Contents are  Projected, means it's not moving inside the slot so we can style it by light DOM Styles*/
+        /* .highlight {
+            background-color: rgb(255, 182, 131);
+        } */
+
+        /* to style custom element from "Light DOM" Jus Use it as built-in Element */
+        /* mxcd-tooltip {
+            background-color: lightgrey;
+        } */
+    </style>
+
     <script src="./tooltip.js"></script>
     <script src="./confirmation-link.js"></script>
 </head>
+
 <body>
     <p>
-        <mxcd-tooltip text="Web Components are beautiful.">Web Components</mxcd-tooltip>
+        <mxcd-tooltip text="Web Components are beautiful.">
+            <span class="highlight">Web Components</span>
+        </mxcd-tooltip>
+
         Lorem ipsum dolor sit amet consectetur adipisicing elit.
     </p>
 
     <br>
-    
+
     <mxcd-tooltip>Tooltip Component without not text Attribute</mxcd-tooltip>
-    
+
     <br>
 
     <mxcd-tooltip></mxcd-tooltip>
@@ -26,7 +43,8 @@
     <br>
     <!-- When Using Custom Web Component For Existing Elements We Use "is" attribute on the element not a custom one -->
     <a is="mxcd-confirmation-link" href="http://github.com/moaalaa">Visit My GitHub</a>
-    
+
 
 </body>
+
 </html>
