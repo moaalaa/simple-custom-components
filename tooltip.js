@@ -12,10 +12,12 @@ class Tooltip extends HTMLElement {
         super();
 
         // _propertyName convention say that this property is "private" but not really do it.
-        this._tooltipContainer;
+        // Don't Have to define in constructor but it's a good case for documenting
         this._tooltipText = 'Tooltip Text!';
+        this._visible = false;
+        this._icon;
 
-        // Using "Shadow DOM"
+        // Using "Shadow DOM" Give us many advantage like scoped styles , seperate "DOM" and define our template easily
         // mode: 'open', 'close' define weather you want to access this element shadow dom from outside or not
         // no meaning to make it close because there other ways to use it even its close anyway
         // so make it open
@@ -113,33 +115,82 @@ class Tooltip extends HTMLElement {
     // --------------------------------------------------------------//
     // Element Created and Attached to the DOM in Simple Word
     connectedCallback() {
-        // Define Attributes
+        // Extract Attributes when the component mounted to the "Light DOM"
+        // Notice we extract attributes only but not observing it
         if (this.hasAttribute('text')) {
             this._tooltipText = this.getAttribute('text');
         }
         
-        const icon = this.shadowRoot.querySelector('span');
+        
+        this._icon = this.shadowRoot.querySelector('span');
         
         // to use "this" that refers to Tooltip Class need to use "bind" 
         // but using Arrow function help to prevent the "this" key word problem
         // icon.addEventListener('mouseenter', this._showTooltip.bind(this)); 
         
-        icon.addEventListener('mouseenter', this._showTooltip);
-        icon.addEventListener('mouseleave', this._hideTooltip);
-        // this.appendChild(icon);
+        this._icon.addEventListener('mouseenter', this._showTooltip);
+        this._icon.addEventListener('mouseleave', this._hideTooltip);
+        // this.appendChild(this._icon);
         // Add Elements to the "Shadow DOM" not to "Light DOM" (Normal DOM)
-        this.shadowRoot.appendChild(icon);
+        // No Need Already Defined in template
+        // this.shadowRoot.appendChild(this._icon);
+
+        this._render();
+    }
+
+    // Listening to Attributes Updates
+    // By Default JavaScript make A Excellent Optimization by Stop Observing All Attributes
+    // because maybe some elements have many attributes
+    // But You Are Not Interesting In it At All so why observing it
+    // That's Why We need to tell JavaScript to Observe What we want only 
+    // by define a static getter called "observedAttributes"
+    attributeChangedCallback(attribute_name, old_value, new_value) {
+        // if old_value is equal to the new_value
+        // just return and exist don't waste any resource and performance on something like this
+        if (old_value === new_value) return;
+
+        // Every Attribute have it's logic so we should check 
+        if (attribute_name === 'text') {
+            this._tooltipText = new_value;
+        }
+    }
+
+    // Define Observed Attributes
+    static get observedAttributes() {
+        return ['text'];
+    }
+
+    // Listen for removing element from the "Light DOM"
+    disconnectedCallback() {
+        this._icon.removeEventListener('mouseenter', this._showTooltip);
+        this._icon.removeEventListener('mouseleave', this._hideTooltip);
     }
 
     // "_methodName" Just convention to say it's just a method just called in inside the class "private method"
+
+    _render() {
+        // initialize the container with the "div" element we have one only that we used
+        let tooltipContainer = this.shadowRoot.querySelector('div');
+
+        if (this._visible) {
+            tooltipContainer = document.createElement('div');
+            tooltipContainer.textContent = this._tooltipText;
+            this.shadowRoot.appendChild(tooltipContainer);    
+        } else {
+            if (tooltipContainer) {
+                this.shadowRoot.removeChild(tooltipContainer);
+            }
+        }
+    }
+
     _showTooltip = () => {
-        this._tooltipContainer = document.createElement('div');
-        this._tooltipContainer.textContent = this._tooltipText;
-        this.shadowRoot.appendChild(this._tooltipContainer);
+        this._visible = true;
+        this._render();
     }
     
     _hideTooltip = () => {
-        this.shadowRoot.removeChild(this._tooltipContainer);
+        this._visible = false;
+        this._render();
     }
 
 }
